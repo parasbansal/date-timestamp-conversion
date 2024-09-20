@@ -7,7 +7,7 @@ export default function Header() {
       <h1 className="text-xl font-semibold"> Date - Timestamp Conversion </h1>
 
       <div className="flex gap-2 items-center justify-end">
-        <a href="https://github.com/parasbansal/date-time-convertor">
+        <a href="https://github.com/parasbansal/date-time-conversion">
           <GitHubLogoIcon className="w-6 h-6" />
         </a>
       </div>
