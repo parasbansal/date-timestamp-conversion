@@ -6,10 +6,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import History from "@/components/History";
 
 export default function Convertor() {
   return (
-    <div className="flex flex-grow items-center justify-center">
+    <div className="flex flex-grow items-center justify-center gap-2">
       <Card>
         <CardHeader>
           <CardTitle>Convertor</CardTitle>
@@ -18,11 +19,13 @@ export default function Convertor() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div>
-            <Input placeholder="Enter Date or Timestamp" />
+          <div className="flex flex-col gap-2">
+            <Input placeholder="Enter Date" />
+            <Input placeholder="Enter Timestamp" />
           </div>
         </CardContent>
       </Card>
+      <History />
     </div>
   );
 }
