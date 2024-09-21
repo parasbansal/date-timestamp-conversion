@@ -40,3 +40,15 @@
     @apply bg-background text-foreground;
   }
 }
+
+.scroll1::-webkit-scrollbar {
+  width: 5px;
+}
+
+.scroll1::-webkit-scrollbar-track {
+  background: #00000000;
+}
+
+.scroll1::-webkit-scrollbar-thumb {
+  background: #ffffff33;
+}

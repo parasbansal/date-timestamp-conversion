@@ -17,10 +17,12 @@ import { Button } from "@/components/ui/button";
 import History from "@/components/History";
 import DateTimePicker, { type Time } from "@/components/DateTimePicker";
 
+import { addZero } from "@/utils/time";
+
 type Direction = "dateToTimestamp" | "timestampToDate";
 
 export default function Convertor() {
-  const history = useHistoryStore((state) => state.history);
+  const addHistory = useHistoryStore((state) => state.addHistory);
 
   const [date, setDate] = useState<Date>(new Date());
   const [dateTimeError, setDateTimeError] = useState<string | null>(null);
@@ -42,34 +44,38 @@ export default function Convertor() {
     }
   };
 
+  const handleDateSelect = (newDate: Date) => {
+    setDate(newDate);
+    setDirection("dateToTimestamp");
+  };
+
   const handleTimeChange = (newTime: Time) => {
-    console.log(newTime);
     setTime(newTime);
+    setDirection("dateToTimestamp");
   };
 
   const handleConvert = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Converting", direction);
     if (direction === "dateToTimestamp") {
-      // Check if date is valid
-      if (!date) {
-        setDateTimeError("Datetime is required");
-        return;
-      }
-
-      const parsedDate = new Date(date);
-
-      if (isNaN(parsedDate.getTime())) {
+      if (isNaN(date.getTime())) {
         setDateTimeError("Invalid Date");
         return;
       }
+      const fullDate =
+        date.toDateString() + ` ${time.hour}:${time.minute}:${time.second}`;
 
-      const timestamp = parsedDate.getTime();
+      const timestamp = new Date(fullDate).getTime();
 
       const convertedTimestamp = Math.floor(timestamp / 1000);
 
       setTimestamp(convertedTimestamp.toString());
-      // addHistory({ dateTime, timestamp });
+
+      addHistory({
+        id: Date.now(),
+        dateTime: fullDate,
+        timestamp: convertedTimestamp,
+      });
     } else if (direction === "timestampToDate") {
       if (!timestamp) {
         setTimestampError("Timestamp is required");
@@ -104,8 +110,20 @@ export default function Convertor() {
 
       setTimestamp(sanitizedTimestamp.toString());
       setDate(new Date(dateTime));
-      // addHistory({ dateTime, timestamp: parseInt(timestamp) });
+      setTime({
+        hour: addZero(date.getHours()),
+        minute: addZero(date.getMinutes()),
+        second: addZero(date.getSeconds()),
+      });
+
+      addHistory({
+        id: Date.now(),
+        dateTime:
+          new Date(dateTime).toDateString() + " " + date.toLocaleTimeString(),
+        timestamp: sanitizedTimestamp,
+      });
     }
+
     setTimestampError(null);
     setDateTimeError(null);
   };
@@ -128,17 +146,10 @@ export default function Convertor() {
               <Label htmlFor="dateTime">Datetime</Label>
               <DateTimePicker
                 date={new Date(date)}
-                setDate={(date) => setDate(date)}
+                setDate={handleDateSelect}
                 time={time}
                 setTime={handleTimeChange}
               />
-              {/* <Input
-                placeholder={`Datetime ${FORMAT}`}
-                value={dateTime}
-                id="dateTime"
-                name="dateTime"
-                onChange={handleChange}
-              /> */}
               {direction === "dateToTimestamp" && dateTimeError && (
                 <div className="text-red-500 text-sm">{dateTimeError}</div>
               )}
@@ -171,7 +182,7 @@ export default function Convertor() {
           </form>
         </CardContent>
       </Card>
-      {history.length > 0 && <History />}
+      <History />
     </div>
   );
 }
