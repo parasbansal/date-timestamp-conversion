@@ -56,7 +56,6 @@ export default function Convertor() {
 
   const handleConvert = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Converting", direction);
     if (direction === "dateToTimestamp") {
       if (isNaN(date.getTime())) {
         setDateTimeError("Invalid Date");
@@ -93,14 +92,12 @@ export default function Convertor() {
       const todayTimestamp = new Date().getTime();
       const todayTimestampLength = todayTimestamp.toString().length - 3;
       if (timestamp.length > todayTimestampLength) {
-        console.log("Removing digits");
         // Remove all digits after present digit
         sanitizedTimestamp = Math.floor(
           sanitizedTimestamp /
             Math.pow(10, timestamp.length - todayTimestampLength)
         );
       }
-      console.log("Sanitized Timestamp", sanitizedTimestamp);
       const date = new Date(sanitizedTimestamp * 1000);
       let dateFormatted = date.toDateString();
       // Remove day from the dateTime
