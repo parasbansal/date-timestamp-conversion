@@ -126,7 +126,7 @@ export default function Convertor() {
   };
 
   return (
-    <div className="flex flex-grow items-center justify-center gap-2">
+    <div className="flex flex-grow items-center justify-center gap-2 max-w-full flex-wrap">
       <Card>
         <CardHeader>
           <CardTitle>Convertor</CardTitle>
